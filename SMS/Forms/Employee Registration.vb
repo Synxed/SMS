@@ -5,7 +5,7 @@ Public Partial Class EmployeeRegistration
         Try
             Using connection As New OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=""Database.accdb""")
                 connection.Open()
-                Dim command As Object = "INSERT INTO Employees (EmployeeID, FullName, Sex, Age, Salary, Mobile, PHP, CSharp, CPP, Python, Java, Swift)" + "Values (@EmployeeID, @Name, @Sex, @Age, @Salary, @Mobile, @PHP, @CSharp, @CPP, @Python, @Java, @Swift)"
+                Dim command As String = "INSERT INTO Employees (EmployeeID, FullName, Sex, Age, Salary, Mobile, PHP, CSharp, CPP, Python, Java, Swift)" + "Values (@EmployeeID, @Name, @Sex, @Age, @Salary, @Mobile, @PHP, @CSharp, @CPP, @Python, @Java, @Swift)"
 
                 Using addQueryCommand As New OleDbCommand(command, connection)
                     addQueryCommand.Parameters.AddWithValue("@EmployeeID", EmployeeIDTextBox.Text)
@@ -27,23 +27,23 @@ Public Partial Class EmployeeRegistration
 
             MessageBox.Show("The employee has been successfully registered.", "Registration Successful", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Catch exception As Exception
-            MessageBox.Show([String].Format("{0}{1}{1}Details: {2}", "An error occurred.", Environment.NewLine, exception.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.[Error])
+            MessageBox.Show(String.Format("{0}{1}{1}Details: {2}", "An error occurred.", Environment.NewLine, exception.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.[Error])
         End Try
     End Sub
 
     Private Sub ResetButton_Click(sender As Object, e As EventArgs) Handles ResetButton.Click
         Try
             For Each control As Control In Me.Controls
-                If control.[GetType]() = GetType(TextBox) Then
+                If control.GetType() = GetType(TextBox) Then
                     CType(control, TextBox).Clear()
-                ElseIf control.[GetType]() = GetType(GroupBox) Then
+                ElseIf control.GetType() = GetType(GroupBox) Then
                     For Each checkBox As CheckBox In (CType(control, GroupBox)).Controls
                         checkBox.Checked = False
                     Next
                 End If
             Next
         Catch exception As Exception
-            MessageBox.Show([String].Format("{0}{1}{1}Details: {2}", "An error occurred.", Environment.NewLine, exception.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.[Error])
+            MessageBox.Show(String.Format("{0}{1}{1}Details: {2}", "An error occurred.", Environment.NewLine, exception.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.[Error])
         End Try
     End Sub
 End Class

@@ -8,8 +8,8 @@ Public Partial Class ProjectAllocation
         Try
             Using connection = New OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=""Database.accdb""")
                 connection.Open()
-                Using fetchProjectNames = New OleDbCommand("SELECT * FROM Projects", connection)
-                    Using reader = fetchProjectNames.ExecuteReader()
+                Using command = New OleDbCommand("SELECT * FROM Projects", connection)
+                    Using reader = command.ExecuteReader()
                         While reader IsNot Nothing AndAlso reader.Read()
                             ProjectListComboBox.Items.Add(reader("ProjectName").ToString())
                         End While
@@ -58,7 +58,7 @@ Public Partial Class ProjectAllocation
 
                 If saveFileDialog.ShowDialog() = DialogResult.OK Then
                     File.WriteAllText(saveFileDialog.FileName, ReportTextBox.Text)
-                    MessageBox.Show("Report successfully exported to {saveFileDialog.FileName}", "Export Successful", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    MessageBox.Show("Report successfully exported to " + saveFileDialog.FileName, "Export Successful", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 End If
              End Using
         Catch exception As Exception
@@ -76,10 +76,10 @@ Public Partial Class ProjectAllocation
         report.AppendLine(Environment.NewLine + "Dated: " + DateTime.Today.ToString("MMMM dd, yyyy"))
         report.AppendLine(Environment.NewLine + "Project Description:")
         report.AppendLine(reader("ProjectDescription") + Environment.NewLine + "")
-        report.AppendLine("Required Skills: {GetSkillsInString(reader)}")
-        report.AppendLine("Required Employee: {employeesRequired}")
-        report.AppendLine("Maximum Allocated Time: {reader[")
-        report.AppendLine("Eligible Employees: ")
+        report.AppendLine("Required Skills: " + GetSkillsInString(reader))
+        report.AppendLine("Required Employee: " + employeesRequired.ToString())
+        report.AppendLine("Maximum Allocated Time: " + reader("AllocatedTime").ToString())
+        report.AppendLine("Eligible Employees: " + Environment.NewLine)
 
         Using connection = New OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=""Database.accdb""")
             connection.Open()
@@ -87,13 +87,14 @@ Public Partial Class ProjectAllocation
                 Using red = row.ExecuteReader()
                     While red IsNot Nothing AndAlso red.Read()
                         If IsEligible(skillsetRequired, GetSkillsInBoolean(red)) Then
-                            report.AppendLine("{red[")
+                             report.AppendLine(String.Format("{0} - {1} ({2})  Age: {3}  Salary: {4:C2}  Mobile: {5}", _
+                                                             red("EmployeeID"), red("FullName"), red("Sex"), red("Age"), Integer.Parse(red("Salary").ToString()), red("Mobile")))
                             employeesRequired -= 1
                         End If
                     End While
 
                     If employeesRequired > 0 Then
-                        report.AppendLine(Environment.NewLine + "{employeesRequired} employees are still required but none of the other existing employees are eligible for the project.")
+                        report.AppendLine(Environment.NewLine + employeesRequired.ToString() + " employees are still required but none of the other existing employees are eligible for the project.")
                     End If
                 End Using
             End Using

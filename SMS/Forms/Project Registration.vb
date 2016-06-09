@@ -26,7 +26,7 @@ Public Partial Class ProjectRegistration
             MessageBox.Show("The project has been successfully registered.", "Registration Successful", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
         Catch exception As Exception
-            MessageBox.Show([String].Format("{0}{1}{1}Details: {2}", "An error occurred.", Environment.NewLine, exception.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.[Error])
+            MessageBox.Show(String.Format("{0}{1}{1}Details: {2}", "An error occurred.", Environment.NewLine, exception.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.[Error])
         End Try
     End Sub
 
@@ -44,7 +44,7 @@ Public Partial Class ProjectRegistration
                 End If
             Next
         Catch exception As Exception
-            MessageBox.Show([String].Format("{0}{1}{1}Details: {2}", "An error occurred.", Environment.NewLine, exception.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.[Error])
+            MessageBox.Show(String.Format("{0}{1}{1}Details: {2}", "An error occurred.", Environment.NewLine, exception.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.[Error])
         End Try
     End Sub
 End Class

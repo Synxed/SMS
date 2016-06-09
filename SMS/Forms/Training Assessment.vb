@@ -9,7 +9,7 @@ Public Partial Class TrainingAssessment
 
         Dim selectedSkill = GetSkillName(SkillComboBox.SelectedItem.ToString())
 
-        For Each employee As Object In GetEmployeesForTraining(selectedSkill)
+        For Each employee As Object() In GetEmployeesForTraining(selectedSkill)
             AssessmentDataGridView.Rows.Add(employee)
         Next
     End Sub
@@ -29,10 +29,10 @@ Public Partial Class TrainingAssessment
 
                 If employees.Any() Then
                     For Each employee In employees
-                        report.AppendLine("{employee[0]} - {employee[1]}  " + "Sex: {employee[2]}  " + "Age: {employee[3]}  " + "Salary: {employee[4]}")
+                        report.AppendLine(String.Format("{0} - {1}  Sex: {2}  Age: {3}  Salary: {4}", employee(0),employee(1),employee(2), employee(3), employee(4)))
                     Next
                 Else
-                    report.AppendLine("No employees require {item} training." + Environment.NewLine)
+                    report.AppendLine(String.Format("No employees require {0}  training.{1}", item.ToString(),  Environment.NewLine))
                 End If
             Next
 
@@ -42,9 +42,9 @@ Public Partial Class TrainingAssessment
 
                 If saveFileDialog.ShowDialog() = DialogResult.OK Then
                     File.WriteAllText(saveFileDialog.FileName, report.ToString())
+                        MessageBox.Show("Report successfully exported to " + saveFileDialog.FileName, "Export Successful", MessageBoxButtons.OK, MessageBoxIcon.Information)        
                 End If
 
-                MessageBox.Show("Report successfully exported to {saveFileDialog.FileName}", "Export Successful", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End Using
         Catch exception As Exception
             MessageBox.Show(String.Format("{0}{1}{1}Details: {2}", "An error occurred.", Environment.NewLine, exception.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.[Error])
@@ -60,7 +60,9 @@ Public Partial Class TrainingAssessment
                     Using red = row.ExecuteReader()
                         While red IsNot Nothing AndAlso red.Read()
                             If Not Convert.ToBoolean(red(GetSkillName(selectedSkill))) Then
-                                employeeList.Add(New Object() {red("EmployeeID").ToString(), red("FullName").ToString(), red("Sex").ToString(), red("Age").ToString(), "{int.Parse(red["})
+                                employeeList.Add(New Object() {red("EmployeeID").ToString(), red("FullName").ToString(), 
+                                                 red("Sex").ToString(), red("Age").ToString(), 
+                                                 String.Format("{0:C2}", Integer.Parse(red("Salary").ToString()))})
                             End If
                         End While
                         Return employeeList
