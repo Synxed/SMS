@@ -8,7 +8,7 @@ Public Partial Class DatabaseForm
                 Using row As New OleDbCommand("SELECT * FROM Employees", connection)
                     Using red = row.ExecuteReader()
                         While red IsNot Nothing AndAlso red.Read()
-                            EmployeesDataGridView.Rows.Add(EmployeesDataGridView.Rows.Count + 1, red("EmployeeID").ToString(), red("FullName").ToString(), red("Sex").ToString(), red("Age").ToString(), red("Mobile").ToString(), _
+                            EmployeesDataGridView.Rows.Add(EmployeesDataGridView.Rows.Count + 1, red("EmployeeID").ToString(), red("FullName").ToString(), red("Sex").ToString(), red("Age").ToString(), String.Format("{0:C}", red("Salary")), red("Mobile").ToString(), _
                                                            Convert.ToBoolean(red("PHP").ToString()), Convert.ToBoolean(red("CSharp").ToString()), Convert.ToBoolean(red("CPP").ToString()), Convert.ToBoolean(red("Python").ToString()), Convert.ToBoolean(red("Java").ToString()), Convert.ToBoolean(red("Swift").ToString()))
                         End While
                     End Using
